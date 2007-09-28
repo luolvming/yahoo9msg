@@ -239,7 +239,11 @@ abstract class Util implements PropertyConstants
 	{	String s,c="";
 		for(int i=0;i<array.length;i++)
 		{	s="0"+Integer.toHexString((int)array[i]);
-			System.out.print(s.substring(s.length()-2)+" ");
+		    if(i==9){
+		    	//System.err.println((int)array[i]);
+		    	System.out.print("["+s.substring(s.length()-2)+"] ");
+		    }else
+		    	System.out.print(s.substring(s.length()-2)+" ");
 			if((int)array[i]>=' ' && (int)array[i]<='~')  c=c+(char)array[i];
 				else  c=c+".";
 			if((i+1)==array.length)

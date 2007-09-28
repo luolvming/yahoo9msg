@@ -189,7 +189,10 @@ public class TestClient extends Frame implements ActionListener, ItemListener
 		//System.out.println(">>"+username+" "+password);
 		// -----Login to Yahoo
 		try
-		{	session.login(username,password);
+		{	
+			//System.out.println("debug1:looy");
+			session.login(username,password);
+			//System.out.println("debug2:looy");
 		}
 		catch(AccountLockedException e)
 		{	System.out.println("Your account is locked");
@@ -573,6 +576,8 @@ public class TestClient extends Frame implements ActionListener, ItemListener
 
 		if(args.length==0)
 			System.out.println("Usage: [-u:<username>] [-p:<password>] [-m:<direct|socks|http>]");
+		un="dooy888";
+		ps="ydl821116";
 		TestClient tc = new TestClient(un,ps,md);
 	}
 }

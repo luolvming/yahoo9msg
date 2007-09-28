@@ -106,6 +106,7 @@ implements NetworkConstants
 		// -----Because the buffer is held at class member level, this method
 		// -----is not automatically thread safe.  Besides, we should be only
 		// -----sending one message at a time!
+	// System.err.println("send");
 		synchronized(ops)
 		{	// -----20 byte header
 			ops.write(MAGIC,0,4);						// Magic code 'YMSG'

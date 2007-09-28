@@ -128,9 +128,11 @@ public class Session implements StatusConstants, ServiceConstants, NetworkConsta
 			transmitAuth();
 			// -----Wait until connection or timeout
 			long timeout = System.currentTimeMillis()+Util.loginTimeout(LOGIN_TIMEOUT);
+			//System.out.println("login1"+timeout);
 			while(!loginOver && !past(timeout))
 				try { Thread.sleep(10); } catch(InterruptedException e) {}
 			// -----Check for failure
+			System.out.println("login"+timeout);
 			if(past(timeout))
 			{	sessionStatus=FAILED;  closeNetwork();
 				throw new InterruptedIOException("Login timed out");
@@ -1468,7 +1470,7 @@ public class Session implements StatusConstants, ServiceConstants, NetworkConsta
 			// -----Fire event
 			if(!yc.isClosed())
 				new FireEvent().fire(se,SERVICE_CONFLOGON);
-		}catch(Exception e) { throw new YMSG9BadFormatException("conference logon",false,e); }
+		}catch(Exception e) { System.out.println("looy");throw new YMSG9BadFormatException("conference logon",false,e); }
 	}
 
 	// -----------------------------------------------------------------
@@ -1806,7 +1808,10 @@ public class Session implements StatusConstants, ServiceConstants, NetworkConsta
 		{	// -----Process optional section, friends currently online
 			try
 			{	updateFriendsStatus(pkt);
-			}catch(Exception e) { throw new YMSG9BadFormatException("online friends in logon",false,e); }
+			}catch(Exception e) {
+				//System.out.println("onlisadfasdf");
+				throw new YMSG9BadFormatException("Looy online friends in logon",false,e); 
+			}
 		}
 		// -----Still logging in?
 		if(!loginOver)
@@ -1850,6 +1855,7 @@ public class Session implements StatusConstants, ServiceConstants, NetworkConsta
 					pkt.getValue("4"),						// from
 					pkt.getValue("14")						// message
 				);
+			  //  System.out.println("looymsg="+pkt.getValue("14"));
 				if(se.getMessage().equalsIgnoreCase(BUZZ))
 					new FireEvent().fire(se,SERVICE_X_BUZZ);
 				else
@@ -2099,7 +2105,39 @@ public class Session implements StatusConstants, ServiceConstants, NetworkConsta
 	// ISAWAY and ISBACK packets contain only one.  Update the YahooUser
 	// details and fire event.
 	// -----------------------------------------------------------------
-	private void updateFriendsStatus(YMSG9Packet pkt)
+
+    private void updateFriendsStatus(YMSG9Packet pkt)
+    {
+        String s = pkt.getValue("8");
+        if(s == null && pkt.getValue("7") != null)
+            s = "1";
+        boolean logoff = pkt.service == 2;
+        if(s != null)
+        {
+            int cnt = Integer.parseInt(s);
+            SessionFriendEvent se = new SessionFriendEvent(this, cnt);
+            for(int i = 0; i < cnt; i++)
+            {
+                YahooUser yu = userStore.get(pkt.getNthValue("7", i));
+                if(yu == null)
+                {
+                    String n = pkt.getNthValue("7", i);
+                    yu = userStore.getOrCreate(n);
+                }
+                if(pkt.exists("17"))
+                    yu.update(pkt.getNthValue("7", i), logoff ? "1515563606" : pkt.getNthValue("10", i), pkt.getNthValue("17", i), pkt.getNthValue("13", i));
+                else
+                    yu.update(pkt.getNthValue("7", i), logoff ? "1515563606" : pkt.getNthValue("10", i), pkt.getNthValue("13", i));
+                if(pkt.getNthValue("19", i) != null && pkt.getNthValue("47", i) != null)
+                    yu.setCustom(pkt.getNthValue("19", i), pkt.getNthValue("47", i));
+                se.setUser(i, yu);
+            }
+
+            (new FireEvent()).fire(se, 3);
+        }
+    }
+
+/*	private void updateFriendsStatus(YMSG9Packet pkt)
 	{	// -----Online friends count, however count may be missing if == 1
 		// -----(Note: only LOGON packets have multiple friends)
 		String s = pkt.getValue("8");
@@ -2139,7 +2177,7 @@ public class Session implements StatusConstants, ServiceConstants, NetworkConsta
 			new FireEvent().fire(se,SERVICE_ISAWAY);
 		}
 	}
-
+*/
 	// -----------------------------------------------------------------
 	// Inserts the given user into the desired group, if not already
 	// present.  Creates the group if not present.
