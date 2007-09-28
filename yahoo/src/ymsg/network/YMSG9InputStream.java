@@ -46,6 +46,7 @@ public class YMSG9InputStream extends BufferedInputStream
 		p.magic = ""+(char)header[0]+(char)header[1]+(char)header[2]+(char)header[3];
 		p.version = u2i(header[5]);
 		p.length = (u2i(header[8])<<8)+(u2i(header[9]));
+		//System.out.println("looy=["+header[8]+":"+header[9]+"]");
 		p.service = (u2i(header[10])<<8)+(u2i(header[11]));
 		p.status = (u2i(header[12])<<24)+(u2i(header[13])<<16)+(u2i(header[14])<<8)+(u2i(header[15]));
 		p.sessionId = (u2i(header[16])<<24)+(u2i(header[17])<<16)+(u2i(header[18])<<8)+(u2i(header[19]));
@@ -62,19 +63,30 @@ public class YMSG9InputStream extends BufferedInputStream
 
 		// -----Now extract strings in the body
 		int start=0;
+		String st="";
+		int j=0;
 		for(int i=0;i<body.length-1;i++)
 		{	if(u2i(body[i])==0xc0 && u2i(body[i+1])==0x80)
 			{	// -----Create a UTF-8 string and add to array
+			    j++;
+			    
 				String s = new String(body,start,i-start,"UTF-8");
 				v.addElement(s);
-				if(dbis!=null)  System.out.println(">>"+s);
+				st+=s;
+				if(j%2==0){
+					System.out.println(">>"+st);
+					st="";
+				}else{
+					st+="=";
+				}
 				// -----Skip over second byte in separator, reset string start
 				i++;  start=i+1;
 			}
 		}
 		p.body = new String[v.size()];
 		for(int i=0;i<v.size();i++)  p.body[i]=(String)v.elementAt(i);
-
+        //modify by looy
+		System.out.println(p.toString());
 		return p;
 	}
 

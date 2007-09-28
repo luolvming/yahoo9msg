@@ -171,7 +171,7 @@ implements ServiceConstants, NetworkConstants
 		
 		if( filterOutput(body,service) )  return;
 		byte[] b = body.getBuffer();
-
+System.out.println(proxyHost+":"+proxyPort);
 		Socket soc = new Socket(proxyHost,proxyPort);
 		PushbackInputStream pbis = new PushbackInputStream(soc.getInputStream());
 		DataOutputStream dos = new DataOutputStream(soc.getOutputStream());

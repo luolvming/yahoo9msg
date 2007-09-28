@@ -120,7 +120,10 @@ class YMSG9Packet
 	{	String s=	"Magic:"+magic+" Version:"+version+" Length:"+length+
 					" Service:"+service+" Status:"+status+" SessionId:0x"+
 					Long.toHexString(sessionId)+"\n ";
-		for(int i=0;i<body.length;i++)  s=s+" ["+body[i]+"]";
+		for(int i=0;i<body.length;i++){
+			s=s+" ["+body[i]+"]";
+			if(i%2==1)s+="\n";
+		}
 		return s;
 	}
 	

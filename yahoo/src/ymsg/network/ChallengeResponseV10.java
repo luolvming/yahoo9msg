@@ -53,7 +53,7 @@ implements ChallengeResponseV10Tables
 	private final static String ENCODE2_LOOKUP = "F0E1D2C3B4A59687abcdefghijklmnop";	// Ditto
 	private final static String ENCODE3_LOOKUP = ",;";
 
-	private final static boolean DB=false;			// Debug
+	private final static boolean DB=true;			// Debug
 	private final static boolean DB2=false;			// Debug deep
 
 	// -----Buffer for binary data, and resource filename

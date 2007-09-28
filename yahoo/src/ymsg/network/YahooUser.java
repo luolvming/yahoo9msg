@@ -92,4 +92,11 @@ public class YahooUser
 		{	customStatusMessage=null;  customStatusBusy=false;
 		}
 	}
+    void update(String i, String st, String vs)
+    {
+        int visibility = 0;
+        visibility = vs != null ? Integer.parseInt(vs) : 0;
+        update(i, Long.parseLong(st), (visibility & 2) > 0, (visibility & 1) > 0);
+    }
+	
 }
