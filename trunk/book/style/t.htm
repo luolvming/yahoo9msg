@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+ <HEAD>
+  <TITLE>边框 </TITLE>
+  <META NAME="Generator" CONTENT="EditPlus">
+  <META NAME="Author" CONTENT="">
+  <META NAME="Keywords" CONTENT="">
+  <META NAME="Description" CONTENT="">
+  <!--style>
+  body{
+    font-size:12px;
+	font-style: normal; ;
+	margin:0 auto;
+	background-color:yellow;
+  }
+  /* override box */
+.main .box {
+	width: 660px;
+	margin: 12px 0 12px 12px;
+	padding: 0;
+	background: url(img/box_bg.gif) -660px repeat-y;
+	
+	position: relative;
+}
+.main .box .caption {
+	height: 30px;
+	margin: 0;
+	padding: 15px 0 0 0;	
+	background: url(img/box_bg.gif) left top no-repeat;
+}
+.main .box .caption h2{
+    font-size:12px;
+	text-indent:20px;
+	margin:0px;
+	padding:0px
+}
+.main .box .container {
+	width: 639px;
+	height: auto !important;
+	/*height:100px;*/
+	min-height: 100px;
+	margin: 5px 1px 5px 10px;
+	padding: 0;
+	background-color: #f7f7f7;
+	overflow: hidden;
+}
+.main .box .footer {
+	height: 10px;
+	margin: 0;
+	padding: 0;
+	background: url(img/box_bg.gif) left bottom no-repeat;
+}
+.footer .more {
+	width: 75px;
+	height: 20px;
+	display: block;
+	line-height: 999px;
+	background: url(img/button_bg.gif) left top no-repeat;
+	overflow: hidden;	
+	position: absolute;
+	top: 10px;
+	right: 15px;
+}
+/*end **/
+.list{margin:0 0 0 15px;padding:0;line-height:200%}
+.list li span{float:right;}
+.list li a{float:left;}
+-->
+<style>
+.container #cL{
+    width:46%;
+	height:120px;
+	background-color:#fff;
+	float:left;
+}
+.container #cR{
+    width:46%;
+	height:120px;
+	background-color:#fff;
+	float:right;
+}
+  </style>
+
+  <link href="http://ui.tudou.com/skin/tag/y/index_0.css" type="text/css" rel="stylesheet"/>
+ </HEAD>
+
+ <BODY>
+  <div id="co">
+
+     <div id="main" class="main">
+	      <div class="box" id="recommond">
+            <div class="caption">
+                <h2>今日推签</h2>
+            </div>
+            <div class="container">
+			    <div id="cL"></div>
+			    <div id="cR"></div>
+			     <!--ul class="list">
+				    <li><a href=>my name is looy 你看看如何</a><span>2008-5-13</span></li>
+				    <li><a href=>my name is looy 你看看如何</a><span>2008-5-13</span></li>
+				    <li><a href=>my name is looy 你看看如何</a><span>2008-5-13</span></li>
+				    <li><a href=>my name is looy 你看看如何</a><span>2008-5-13</span></li>
+				 </ul-->
+            </div>
+            <div class="footer">
+              <a href="http://tag.tudou.com/tagOp.do?method=showTags" class="more">查看全部</a>	
+            </div>
+        </div>
+	 </div>
+    
+  </div><!--end co-->
+
+  <script>
+  document.onkeydown=function key(e){
+       e=e?e:window.event;
+	   alert(e.keyCode);
+  }
+  </script>
+ </BODY>
+</HTML>
