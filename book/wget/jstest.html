@@ -1,0 +1,18 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>event.cancelBubble</title>
+<style>
+<!--
+* {font:menu}
+-->
+</style>
+</head>
+
+<body>
+<span onclick=alert("你好")>点我 <span>再点我</span></span><br><br>
+
+<span onclick=alert("你好")>点我 <span onclick="event.cancelBubble=true;">再点我</span></span>
+</body>
+
+</html>
