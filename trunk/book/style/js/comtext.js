@@ -5,20 +5,6 @@
 document.oncontextmenu=function(e){return false;} 
 document.onselectstart=function(e){return false;} 
 
-function popUp(e) {
-   e= e?e:window.event;
-   menu = document.getElementById('mmenu');
-   if (e.button == 2) {
-	newX = e.x + document.body.scrollLeft;
-	newY =e.y + document.body.scrollTop;
-	menu.style.display = ""
-	menu.style.pixelLeft = newX;
-	menu.style.pixelTop = newY;
-  }
-  else{
-	  menu.style.display = "none";
-  }
-}
 
 /*全屏处理*/
 var isAllCreen=false;
@@ -54,22 +40,8 @@ function changeBackGround(id){
 }
 /*修改字体大小*/
 function changeFontSize(id){
-	var bid=$('Context');
-	var size=12;
-	switch(id.value){
-		case "0":
-			return;
-		case "1":
-		case"3":
-			size='13';break;
-		case"2":
-		   size='12';break;
-		case"4":
-		   size='14';break;
-		case"5":
-		   size='16';break;
-		       
-	}
+	var bid=$('Context');	
+	size= id=='-'?parseInt(getCookie('fontSize'))-1:parseInt(getCookie('fontSize'))+1;
 	bid.style.fontSize =size+"px";
 	addCookie('fontSize',size);
 	//alert(bid.style.fontSize);
