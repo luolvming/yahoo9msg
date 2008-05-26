@@ -6,7 +6,8 @@
 
 = 处理由js处理的unescape =
 
-/*处理由js处理的unescape*/
+处理由js处理的unescape
+
 {{{
 function unescape($str,$encode='gbk'){
     if(!function_exists('mb_convert_encoding')&& !function_exists('iconv') ) return $str;
@@ -28,6 +29,20 @@ function unescape($str,$encode='gbk'){
         }
     }
     return $r;
+}
+
+}}}
+
+~~自行处理的一个unescape~~
+{{{
+function p(&$p){
+    if(is_array($p)){
+        foreach($p as $k=>$v){
+            p($p[$k]);
+        }
+    }else{
+        $p=unescape($p);
+    }
 }
 
 }}}
