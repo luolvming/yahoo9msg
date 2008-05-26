@@ -33,7 +33,8 @@ function unescape($str,$encode='gbk'){
 
 }}}
 
-~~自行处理的一个unescape~~
+
+*自行处理的一个unescape
 {{{
 function p(&$p){
     if(is_array($p)){
