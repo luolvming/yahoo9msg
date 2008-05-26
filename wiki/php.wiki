@@ -4,11 +4,30 @@
 
 这里记录php的一些平时记录
 
-= Details =
+= 处理由js处理的unescape =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+/*处理由js处理的unescape*/
+{{{
+function unescape($str,$encode='gbk'){
+    if(!function_exists('mb_convert_encoding')&& !function_exists('iconv') ) return $str;
+    $r='';
+    for($i=0,$c=strlen($str);$i<$c;$i++){
+        $posS=strpos($str,'%u',$i);
+        if($posS!==false&& $posS==$i){
+            $v=substr($str,$posS+2,4);
+            if(is_numeric(hexdec($v))) {
+                if(function_exists('mb_convert_encoding')){
+                    $r.= mb_convert_encoding(pack("H*",$v),$encode,"UCS-2");
+                }elseif(function_exists('iconv')){
+                    $r .= iconv("UCS-2",$encode,pack("H*",dechex($v)));
+                }
+                $i=$posS+5;
+            }else $r.= $str{$i};
+        }else{
+            $r.= $str{$i};
+        }
+    }
+    return $r;
+}
 
-`inline code`
+}}}
