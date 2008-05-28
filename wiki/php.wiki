@@ -48,16 +48,6 @@ function p(&$p){
 
 }}}
 
-/*数据库 插入表防止 sql注入*/
-function _s(&$p){
-    if(is_array($p)){
-        foreach($p as $k=>$v){
-            _s($p[$k]);
-        }
-    }else{
-        $p=addslashes($p);
-    }
-}
 
 /*数据库 插入表防止 sql注入 解压*/
 {{{
