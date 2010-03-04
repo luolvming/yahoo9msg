@@ -1,0 +1,103 @@
+#服务器config配置
+
+= nginx config =
+
+user  www www;
+worker_processes  8;
+
+error_log   /data/logs/nginx/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+#pid        logs/nginx.pid;
+events {
+    use epoll;
+    worker_connections  51200;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    tcp_nopush     on;
+    server_names_hash_bucket_size 128;
+
+    access_log off;
+#    access_log logs/access_log.log;
+    keepalive_timeout  60;
+    tcp_nodelay on;
+
+    gzip  on;
+    include vhosts/*;
+
+    fastcgi_connect_timeout 3000;
+    fastcgi_send_timeout 3000;
+    fastcgi_read_timeout 3000;
+
+
+}
+
+
+= vhost/dj.iciba.com =
+
+server
+{
+    listen 80;
+    server_name dj.iciba.com admin.dj.iciba.com 60.28.216.6 192.168.0.6;
+    index index.html index.php index.shtml index.htm ;
+    root  /data/app/dj.iciba.com/webapp/dj.iciba.com/wwwroot;
+#   error_page 404 http://$server_name/404.html;
+    rewrite "^/search(.*)" /djsearch.php$1;
+rewrite "^/list_([0-9]*)_([0-9]*)\.shtml$" /list.php?type=$1&page=$2;
+rewrite "^/write/cat\.html$" /v5/index.php?mod=write;
+rewrite "^/write/zm\.html" /v5/index.php?mod=write&zm=1;
+rewrite "^/synonym/([a-z])\.html" /v5/index.php?mod=synonym&zm=$1;
+if (!-f $request_filename)
+{
+    rewrite "^/([^\/]+)/?$" /v5/djsearchV5.php?s=$1;
+    #rewrite "^/([^\/]+)$" /djsearch.php?s=$1;
+    #rewrite "^/([^\/]+)/$" /djsearch.php?s=$1;
+}
+    location ~ .*\.php?$
+    {
+        include fastcgi_judian;
+    }
+        location ~* .(jpg|gif|png|js)$ {
+            if (-f $request_filename) {
+                expires max;
+                break;
+            }
+        }
+}
+
+= fastcgi_judian config =
+
+fastcgi_ignore_client_abort  on;
+fastcgi_pass   127.0.0.1:9001;
+fastcgi_index  index.php;
+
+fastcgi_param  QUERY_STRING       $query_string;
+fastcgi_param  REQUEST_METHOD     $request_method;
+fastcgi_param  CONTENT_TYPE       $content_type;
+fastcgi_param  CONTENT_LENGTH     $content_length;
+fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+
+fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
+fastcgi_param  REQUEST_URI        $request_uri;
+fastcgi_param  DOCUMENT_URI       $document_uri;
+fastcgi_param  DOCUMENT_ROOT      $document_root;
+fastcgi_param  SERVER_PROTOCOL    $server_protocol;
+
+fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
+fastcgi_param  SERVER_SOFTWARE    nginx/$nginx_version;
+
+fastcgi_param  REMOTE_ADDR        $remote_addr;
+fastcgi_param  REMOTE_PORT        $remote_port;
+fastcgi_param  SERVER_ADDR        $server_addr;
+fastcgi_param  SERVER_PORT        $server_port;
+fastcgi_param  SERVER_NAME        $server_name;
+
+# PHP only, required if PHP was built with --enable-force-cgi-redirect
+fastcgi_param  REDIRECT_STATUS    300;
+
+
