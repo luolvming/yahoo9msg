@@ -1,0 +1,73 @@
+# 介绍 #
+
+这里记录php的一些平时记录
+
+# 处理由js处理的unescape #
+
+处理由js处理的unescape
+
+```
+function unescape($str,$encode='gbk'){
+    if(!function_exists('mb_convert_encoding')&& !function_exists('iconv') ) return $str;
+    $r='';
+    for($i=0,$c=strlen($str);$i<$c;$i++){
+        $posS=strpos($str,'%u',$i);
+        if($posS!==false&& $posS==$i){
+            $v=substr($str,$posS+2,4);
+            if(is_numeric(hexdec($v))) {
+                if(function_exists('mb_convert_encoding')){
+                    $r.= mb_convert_encoding(pack("H*",$v),$encode,"UCS-2");
+                }elseif(function_exists('iconv')){
+                    $r .= iconv("UCS-2",$encode,pack("H*",dechex($v)));
+                }
+                $i=$posS+5;
+            }else $r.= $str{$i};
+        }else{
+            $r.= $str{$i};
+        }
+    }
+    return $r;
+}
+
+```
+
+
+**自行处理的一个unescape
+```
+function p(&$p){
+    if(is_array($p)){
+        foreach($p as $k=>$v){
+            p($p[$k]);
+        }
+    }else{
+        $p=unescape($p);
+    }
+}
+
+```**
+
+
+/**数据库 插入表防止 sql注入 解压**/
+```
+function _s(&$p){
+    if(is_array($p)){
+        foreach($p as $k=>$v){
+            _s($p[$k]);
+        }
+    }else{
+        $p=addslashes($p);
+    }
+}
+
+/*数据库 插入表防止 sql注入 解压*/
+function _us(&$p){    
+    if(is_array($p)){
+        foreach($p as $k=>$v){
+            _us($p[$k]);
+        }
+    }else{
+        $p=stripslashes($p);
+    }
+}
+
+```
